@@ -28,6 +28,7 @@ function MapPage() {
         }}
         style={{
           // 지도의 크기
+          top: "40px",
           width: "90%",
           height: "600px",
           left: "5%",
