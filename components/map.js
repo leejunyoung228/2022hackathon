@@ -1,57 +1,74 @@
 import React, { useEffect, useState } from "react";
 import data from "../constant/data";
 import axios from "axios";
-function Map() {
-  const [tdata, setData] = useState({});
-  const fatchData = async () => {
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+function MapPage() {
+  const [opened, setOpened] = useState(false);
+  const [tdata, setData] = useState(undefined);
+  const fetchData = async () => {
     const result = await axios.get("/api/database");
     setData(result.data);
   };
   useEffect(() => {
-    fatchData().then(() => {
-      if (kakao != null) {
-        var container = document.getElementById("map");
-        var options = {
-          center: new kakao.maps.LatLng(35.14243585763422, 128.91433704778765),
-          level: 6,
-        };
-        var map = new kakao.maps.Map(container, options);
-        data.map(function (locate, i) {
-          var markerPosition = new kakao.maps.LatLng(locate.X, locate.Y);
-          var marker = new kakao.maps.Marker({
-            position: markerPosition,
-          });
-          marker.setMap(map);
-          const a =
-            `<h5>${locate.NAME}<h5/>` +
-            `<p>온도 : ${JSON.stringify(tdata["temperature"])}</p>` +
-            `<p>습도 :  ${JSON.stringify(tdata["humidity"])}%</p>` +
-            `<p>${
-              Number(tdata["rain"]) > 2400
-                ? "비가 오지 않습니다."
-                : "비가 옵니다."
-            }</p>`;
-          var iwContent = a,
-            iwRemoveable = true;
-          var infowindow = new kakao.maps.InfoWindow({
-            content: iwContent,
-            removable: iwRemoveable,
-          });
-          kakao.maps.event.addListener(marker, "click", function () {
-            fatchData().then(() => {
-              infowindow.open(map, marker);
-            });
-          });
-        });
-
-        map.setZoomable(false);
-      }
-    });
+    fetchData();
   }, []);
+  useEffect(() => {
+    let interval = setInterval(() => fetchData(), 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  });
   return (
     <div>
-      <div id="map" style={{ width: "500px", height: "400px" }}></div>
+      <Map // 지도를 표시할 Container
+        center={{
+          // 지도의 중심좌표
+          lat: 35.14243585763422,
+          lng: 128.91433704778765,
+        }}
+        style={{
+          // 지도의 크기
+          width: "90%",
+          height: "600px",
+          left: "5%",
+        }}
+        level={3} // 지도의 확대 레벨
+      >
+        {data.map((item, index) => {
+          return (
+            <MapMarker
+              position={{ lat: item.X, lng: item.Y }}
+              onClick={() => setOpened(true)}
+              key={index}
+            />
+          );
+        })}
+      </Map>
+      {tdata && opened && (
+        <div
+          style={{
+            position: "absolute",
+            top: 100,
+            right: 100,
+            width: 300,
+            height: 300,
+            backgroundColor: "#FFFFFF",
+            boxShadow: "0 0 10px #000",
+            zIndex: 9999,
+            borderRadius: 15,
+            padding: 30,
+          }}
+        >
+          <p>온도 : {tdata["temperature"]}C</p>
+          <p>습도 : {tdata["humidity"]}%</p>
+          <p>
+            {Number(tdata["rain"]) > 2400
+              ? "비가 오지 않습니다"
+              : "비가 옵니다."}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
-export default Map;
+export default MapPage;
