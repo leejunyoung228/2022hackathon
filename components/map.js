@@ -59,6 +59,16 @@ function MapPage() {
             padding: 30,
           }}
         >
+          <button
+            onClick={() => {
+              setOpened(false);
+            }}
+            style={{
+              float: "right",
+            }}
+          >
+            X
+          </button>
           <p>온도 : {tdata["temperature"]}C</p>
           <p>습도 : {tdata["humidity"]}%</p>
           <p>
