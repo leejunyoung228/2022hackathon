@@ -26,5 +26,5 @@ export default async function handler(req, res) {
   let sensor = database.ref("sensor");
   let data = await sensor.get();
   //console.info(data);
-  res.json(data);
+  res.json(data.toJSON());
 }
