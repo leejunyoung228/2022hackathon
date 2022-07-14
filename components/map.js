@@ -1,15 +1,15 @@
-/*global kakao*/
 import React, { useEffect, useState } from "react";
 import data from "../constant/data";
 import axios from "axios";
 function Map() {
-  const [tdata, setData] = useState();
+  const [tdata, setData] = useState({});
   const fatchData = async () => {
     const result = await axios.get("/api/database");
     setData(result.data);
   };
   useEffect(() => {
     fatchData();
+    console.log(tdata);
     if (kakao != null) {
       var container = document.getElementById("map");
       var options = {
