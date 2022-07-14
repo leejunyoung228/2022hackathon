@@ -1,12 +1,13 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { useEffect } from 'react'
-import styles from '../styles/Home.module.css'
+import Footer from '../components/footer'
+import Header from '../components/Header'
+import Map from '../components/map'
 
-export default function Home() {
+export default function Index() {
   return (
-    <div className={styles.container}>
-
+    <div>
+      <Header />
+      <Map/>
+      <Footer/>
     </div>
   )
 }
