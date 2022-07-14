@@ -16,7 +16,7 @@ function Map(){
                 position: markerPosition
               });
               marker.setMap(map);
-              const a = `<h4>${locate.NAME}<h4/>` + `<p>온도 : ${locate.TMP}</p>` + ` 습도 : ${locate.HUD}`
+              const a = `<div style="width:230px; height:100% ">${locate.NAME}<br/>` + `온도 : ${locate.TMP}` + `      습도 : ${locate.HUD}<div>`
               var iwContent = a, iwRemoveable = true;
               var infowindow = new kakao.maps.InfoWindow({
                 content : iwContent,
@@ -31,8 +31,8 @@ function Map(){
         }
       }, [])
       return (
-          <div>
-              <div id="map" style={{width:"500px", height:"400px"}}></div> 
+          <div className='map1'>
+              <div id="map" style={{width:"600px", height:"500px"}}></div> 
           </div>
       )
   }
